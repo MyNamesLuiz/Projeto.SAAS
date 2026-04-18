@@ -1,6 +1,7 @@
 # PRD — Orquestrador de Fluxo: APEX AUTOBODY
 
 > **Squad:** SQUAD 6
+
 > **Negócio escolhido:** APEX AUTOBODY — Funilaria e Pintura
 
 ---
