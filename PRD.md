@@ -185,20 +185,21 @@ Isso resolve a pergunta real que surge quando um cliente reclama de atraso: *"qu
 
 ```
 frontend/
-  src/
-    components/   
-    pages/        
-    services/     
-    types/        
-    hooks/        
-    store/        
-
+└── src/
+    ├── components/   # Componentes reutilizáveis (Card, Badge, Modal, Button…)
+    ├── pages/        # KanbanPage, DashboardPage, OSDetailPage
+    ├── services/     # api.ts, os.service.ts
+    ├── types/        # OS.ts, Historico.ts, Dashboard.ts
+    ├── hooks/        # useOS.ts, useDashboard.ts, useSearch.ts
+    └── store/        # kanbanStore.ts (Zustand)
+ 
 backend/
-  src/
-    routes/       
-    controllers/  
-    models/       
-    types/        
+└── src/
+    ├── routes/       # os.routes.ts, dashboard.routes.ts
+    ├── controllers/  # os.controller.ts, dashboard.controller.ts
+    ├── models/       # os.model.ts, historico.model.ts
+    └── types/        # Tipos compartilhados com o frontend
+```
 ```
 
 ### Tecnologias
