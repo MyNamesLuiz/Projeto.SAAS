@@ -1,0 +1,17 @@
+### Criar Nova OS
+POST http://localhost:3333/os
+Content-Type: application/json
+
+{
+  "cliente_nome": "Lettícia Eugenio",
+  "cliente_telefone": "21999999999",
+  "veiculo_placa": "APX2026",
+  "veiculo_modelo": "Xiaomi SU7",
+  "veiculo_ano": 2025,
+  "descricao_servico": "Pintura completa em Azul Elétrico",
+  "valor_estimado": 5500.00,
+  "prazo_estimado": "2026-05-15"
+}
+
+### Listar OS (Para conferir se salvou)
+GET http://localhost:3333/os
