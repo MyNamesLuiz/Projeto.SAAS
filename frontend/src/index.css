@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/*Fontes */
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* ── Tokens de identidade APEX ─────────────────────────────────────────────── */
+:root {
+  --apex-bg:          #090909;
+  --apex-surface:     #0f0f0f;
+  --apex-card:        #141414;
+  --apex-card-hover:  #191919;
+  --apex-border:      #1f1f1f;
+  --apex-border-2:    #2a2a2a;
+
+  --apex-lime:        #c8f500;
+  --apex-lime-dim:    #9fbe00;
+  --apex-lime-bg:     rgba(200,245,0,0.07);
+  --apex-lime-border: rgba(200,245,0,0.18);
+
+  --apex-text:        #f2f2f2;
+  --apex-muted:       #666666;
+  --apex-muted-2:     #444444;
+
+  --apex-danger:      #ff3d3d;
+  --apex-danger-bg:   rgba(255,61,61,0.08);
+  --apex-danger-b:    rgba(255,61,61,0.2);
+
+  --apex-warning:     #f5a623;
+  --apex-warning-bg:  rgba(245,166,35,0.08);
+
+  --apex-blue:        #4d9fff;
+  --apex-blue-bg:     rgba(77,159,255,0.08);
+
+  --apex-purple:      #bf80ff;
+  --apex-purple-bg:   rgba(191,128,255,0.08);
+
+  --apex-green:       #00e5a0;
+  --apex-green-bg:    rgba(0,229,160,0.08);
+
+  --f-display: 'Barlow Condensed', sans-serif;
+  --f-body:    'Barlow', sans-serif;
+  --f-mono:    'JetBrains Mono', monospace;
+}
+
+/*Reset base */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--apex-bg);
+  color: var(--apex-text);
+  font-family: var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*Scrollbar global */
+::-webkit-scrollbar        { width: 3px; height: 3px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--apex-border-2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+/*Kanban board scrollbar */
+.kanban-board::-webkit-scrollbar        { height: 3px; }
+.kanban-board::-webkit-scrollbar-track  { background: transparent; }
+.kanban-board::-webkit-scrollbar-thumb  { background: var(--apex-border-2); border-radius: 2px; }
+
+@media (max-width: 767px) {
+  .kanban-board::-webkit-scrollbar { display: none; }
+  .kanban-board                    { scrollbar-width: none; }
+}
+
+/* Animação de entrada do card após drop */
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+.card-enter {
+  animation: cardEnter 280ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/*Pulse de alerta */
+@keyframes alertPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.alert-pulse { animation: alertPulse 2s ease-in-out infinite; }
