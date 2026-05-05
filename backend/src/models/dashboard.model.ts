@@ -1,12 +1,11 @@
 import { getDB } from '../db/database.js';
-import type { QueryExecResult, SqlValue } from 'sql.js';
 import type { DashboardMetrics } from '../types/index.js';
 
-function stmtToRows(result: QueryExecResult[]): Record<string, SqlValue>[] {
+function stmtToRows(result: ReturnType<typeof getDB>['exec']): Record<string, unknown>[] {
   if (!result.length) return [];
   const [{ columns, values }] = result;
-  return values.map((row: SqlValue[]) =>
-    Object.fromEntries(columns.map((col: string, i: number) => [col, row[i]]))
+  return values.map((row: { [x: string]: any; }) =>
+    Object.fromEntries(columns.map((col: any, i: string | number) => [col, row[i]]))
   );
 }
 

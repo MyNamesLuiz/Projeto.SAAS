@@ -1,7 +1,7 @@
 import { getDB, persistDB } from '../db/database.js';
 import type { OS, CreateOSBody, UpdateOSBody, StatusOS, HistoricoOS } from '../types/index.js';
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
+// helpers
 
 function rowToOS(row: Record<string, unknown>): OS {
   const updatedAt = row.updated_at as string;
@@ -42,8 +42,8 @@ function rowToOS(row: Record<string, unknown>): OS {
 function stmtToRows(result: ReturnType<typeof getDB>['exec']): Record<string, unknown>[] {
   if (!result.length) return [];
   const [{ columns, values }] = result;
-  return values.map((row) =>
-    Object.fromEntries(columns.map((col, i) => [col, row[i]]))
+  return values.map((row: { [x: string]: any; }) =>
+    Object.fromEntries(columns.map((col: any, i: string | number) => [col, row[i]]))
   );
 }
 
