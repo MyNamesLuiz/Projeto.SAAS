@@ -1,42 +1,44 @@
 @import "tailwindcss";
 
-/*Fontes */
+/* Fontes */
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-/*Tokens de identidade APEX */
+/* Tokens de identidade APEX AUTOBODY */
 :root {
-  --apex-bg:          #090909;
-  --apex-surface:     #0f0f0f;
-  --apex-card:        #141414;
-  --apex-card-hover:  #191919;
-  --apex-border:      #1f1f1f;
-  --apex-border-2:    #2a2a2a;
+  /* Fundos */
+  --apex-bg:          #1A1710;
+  --apex-surface:     #1F1D13;
+  --apex-card:        #252218;
+  --apex-card-hover:  #2E2B1E;
+  --apex-border:      #332E20;
+  --apex-border-2:    #3D3828;
 
-  --apex-lime:        #c8f500;
-  --apex-lime-dim:    #9fbe00;
-  --apex-lime-bg:     rgba(200,245,0,0.07);
-  --apex-lime-border: rgba(200,245,0,0.18);
+  /* Dourado — cor primária da marca */
+  --apex-gold:        #BA7517;
+  --apex-gold-dim:    #854F0B;
+  --apex-gold-bright: #EF9F27;
+  --apex-gold-bg:     rgba(186, 117, 23, 0.10);
+  --apex-gold-border: rgba(186, 117, 23, 0.25);
 
-  --apex-text:        #f2f2f2;
-  --apex-muted:       #666666;
-  --apex-muted-2:     #444444;
+  /* Texto */
+  --apex-text:        #F5F0E8;
+  --apex-muted:       #8A8475;
+  --apex-muted-2:     #5A5649;
+
 
   --apex-danger:      #ff3d3d;
-  --apex-danger-bg:   rgba(255,61,61,0.08);
-  --apex-danger-b:    rgba(255,61,61,0.2);
-
-  --apex-warning:     #f5a623;
-  --apex-warning-bg:  rgba(245,166,35,0.08);
-
+  --apex-danger-bg:   rgba(255, 61,  61,  0.08);
+  --apex-danger-b:    rgba(255, 61,  61,  0.20);
+  --apex-warning:     #EF9F27;
+  --apex-warning-bg:  rgba(239, 159, 39,  0.10);
   --apex-blue:        #4d9fff;
-  --apex-blue-bg:     rgba(77,159,255,0.08);
-
+  --apex-blue-bg:     rgba(77,  159, 255, 0.08);
   --apex-purple:      #bf80ff;
-  --apex-purple-bg:   rgba(191,128,255,0.08);
-
+  --apex-purple-bg:   rgba(191, 128, 255, 0.08);
   --apex-green:       #00e5a0;
-  --apex-green-bg:    rgba(0,229,160,0.08);
+  --apex-green-bg:    rgba(0,   229, 160, 0.08);
 
+  /* Tipografia */
   --f-display: 'Barlow Condensed', sans-serif;
   --f-body:    'Barlow', sans-serif;
   --f-mono:    'JetBrains Mono', monospace;
@@ -57,9 +59,9 @@ html, body, #root {
 ::-webkit-scrollbar        { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track  { background: transparent; }
 ::-webkit-scrollbar-thumb  { background: var(--apex-border-2); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+::-webkit-scrollbar-thumb:hover { background: var(--apex-gold-dim); }
 
-/*Kanban board scrollbar */
+/* Kanban board scrollbar  */
 .kanban-board::-webkit-scrollbar        { height: 3px; }
 .kanban-board::-webkit-scrollbar-track  { background: transparent; }
 .kanban-board::-webkit-scrollbar-thumb  { background: var(--apex-border-2); border-radius: 2px; }
@@ -69,7 +71,7 @@ html, body, #root {
   .kanban-board                    { scrollbar-width: none; }
 }
 
-/* Animação de entrada do card após drop */
+/* Animação de entrada do card após drop  */
 @keyframes cardEnter {
   from { opacity: 0; transform: translateY(-6px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
@@ -84,3 +86,22 @@ html, body, #root {
   50%       { opacity: 0.4; }
 }
 .alert-pulse { animation: alertPulse 2s ease-in-out infinite; }
+
+/*Brilho dourado (hover em elementos de destaque)*/
+@keyframes goldShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--apex-gold-dim) 0%,
+    var(--apex-gold-bright) 40%,
+    var(--apex-gold-dim) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 3s linear infinite;
+}
