@@ -1,10 +1,8 @@
-// ─── API Client ───────────────────────────────────────────────────────────────
-// Centralize todas as chamadas HTTP aqui.
-// O vite.config.ts faz proxy de /api → http://localhost:3333
+// API Client 
 
 import type { OS, HistoricoOS, DashboardMetrics, CreateOSBody, UpdateOSBody } from '../types/os'
 
-const BASE = '/api'
+const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api`
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
@@ -19,7 +17,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>
 }
 
-// ─── Ordens de Serviço ────────────────────────────────────────────────────────
+//Ordens de Serviço
 
 export const api = {
   os: {
