@@ -5,8 +5,6 @@ import { api } from '../services/api'
 import { Section, Field, inputCls } from './FormHelpers'
 import { Button } from './ui/Button'
 
-//Nav config 
-
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard',        short: 'Dashboard' },
   { to: '/kanban',    label: 'Kanban',            short: 'Kanban'    },
@@ -19,7 +17,6 @@ const PAGE_TITLES: Record<string, string> = {
   '/os':        'Ordens de Serviço',
 }
 
-//Ícones SVG inline
 function IconDashboard({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
@@ -63,7 +60,16 @@ const NAV_ICONS_SM: Record<string, React.ReactNode> = {
   '/os':        <IconList size={22} />,
 }
 
-//Layout principal
+// Chevron mark SVG (logo geométrico)
+function ApexMark({ size = 32 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
+      <polygon points="10,28 16,8 18,8 13,28"  fill="#EF9F27" />
+      <polygon points="22,28 16,8 14,8 19,28"  fill="#BA7517" />
+      <rect x="11.5" y="17" width="9" height="2.5" rx="1" fill="#FAC775" />
+    </svg>
+  )
+}
 
 export default function Layout() {
   const location = useLocation()
@@ -74,7 +80,7 @@ export default function Layout() {
   return (
     <div className="flex h-[100dvh] overflow-hidden" style={{ background: 'var(--apex-bg)' }}>
 
-      {/* ── Sidebar desktop ── */}
+      {/*Sidebar desktop*/}
       <aside
         className="hidden md:flex flex-col flex-shrink-0"
         style={{
@@ -88,29 +94,19 @@ export default function Layout() {
           className="flex items-center justify-center flex-shrink-0"
           style={{ height: 64, borderBottom: '1px solid var(--apex-border)' }}
         >
-          <div
-            style={{
-              width: 44, height: 44,
-              background: 'var(--apex-lime)',
-              borderRadius: 12,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            <span style={{
-              fontFamily: 'var(--f-display)',
-              fontSize: 16, fontWeight: 900,
-              color: '#090909', letterSpacing: '-0.5px',
-            }}>
-              AX
-            </span>
+          <div style={{
+            width: 44, height: 44,
+            background: '#1A1710',
+            border: '1px solid var(--apex-gold-border)',
+            borderRadius: 12,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <ApexMark size={28} />
           </div>
         </div>
 
         {/* Nav */}
-        <nav
-          className="flex-1 flex flex-col items-center py-3 gap-1"
-          aria-label="Navegação principal"
-        >
+        <nav className="flex-1 flex flex-col items-center py-3 gap-1" aria-label="Navegação principal">
           {NAV_ITEMS.map((item) => (
             <NavLink key={item.to} to={item.to} style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
               {({ isActive }) => (
@@ -119,27 +115,25 @@ export default function Layout() {
                   style={{
                     width: 56, padding: '10px 4px',
                     borderRadius: 12,
-                    background: isActive ? 'var(--apex-lime-bg)' : 'transparent',
+                    background: isActive ? 'var(--apex-gold-bg)' : 'transparent',
                   }}
                   title={item.label}
                 >
-                  {/* Ícone em card */}
                   <div style={{
                     width: 40, height: 40,
-                    background: isActive ? 'var(--apex-lime-bg)' : 'var(--apex-card)',
-                    border: `1px solid ${isActive ? 'var(--apex-lime-border)' : 'var(--apex-border-2)'}`,
+                    background: isActive ? 'rgba(186,117,23,0.12)' : 'var(--apex-card)',
+                    border: `1px solid ${isActive ? 'var(--apex-gold-border)' : 'var(--apex-border-2)'}`,
                     borderRadius: 11,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: isActive ? 'var(--apex-lime)' : 'var(--apex-muted)',
+                    color: isActive ? 'var(--apex-gold-bright)' : 'var(--apex-muted)',
                     transition: 'all 0.15s',
                   }}>
                     {NAV_ICONS[item.to]}
                   </div>
-                  {/* Label */}
                   <span style={{
                     fontFamily: 'var(--f-body)',
                     fontSize: 9, fontWeight: 600,
-                    color: isActive ? 'var(--apex-lime)' : 'var(--apex-muted)',
+                    color: isActive ? 'var(--apex-gold-bright)' : 'var(--apex-muted)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.04em',
                     textAlign: 'center',
@@ -191,43 +185,45 @@ export default function Layout() {
               className="flex md:hidden items-center justify-center"
               style={{
                 width: 32, height: 32,
-                background: 'var(--apex-lime)',
+                background: '#1A1710',
+                border: '1px solid var(--apex-gold-border)',
                 borderRadius: 8,
               }}
             >
-              <span style={{ fontFamily: 'var(--f-display)', fontSize: 12, fontWeight: 900, color: '#090909' }}>
-                AX
-              </span>
+              <ApexMark size={20} />
             </div>
 
-            <h1 style={{
-              fontFamily: 'var(--f-display)',
-              fontSize: 18, fontWeight: 900,
-              color: 'var(--apex-text)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-            }}>
-              {title}
-            </h1>
-
-            <span
-              className="hidden sm:inline"
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: 9,
-                color: 'var(--apex-muted)',
-                background: 'var(--apex-card)',
-                border: '1px solid var(--apex-border-2)',
-                padding: '2px 8px',
-                borderRadius: 4,
-                letterSpacing: '0.05em',
+            {/* Wordmark */}
+            <div className="flex items-baseline gap-2">
+              <h1 style={{
+                fontFamily: 'var(--f-display)',
+                fontSize: 18, fontWeight: 900,
+                color: 'var(--apex-text)',
                 textTransform: 'uppercase',
-              }}
-            >
-              {new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).toUpperCase()}
-            </span>
+                letterSpacing: '0.04em',
+              }}>
+                {title}
+              </h1>
+              <span
+                className="hidden sm:inline"
+                style={{
+                  fontFamily: 'var(--f-mono)',
+                  fontSize: 9,
+                  color: 'var(--apex-gold)',
+                  background: 'var(--apex-gold-bg)',
+                  border: '1px solid var(--apex-gold-border)',
+                  padding: '2px 8px',
+                  borderRadius: 4,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).toUpperCase()}
+              </span>
+            </div>
           </div>
 
+          {/* CTA principal dourado */}
           <Button intent="primary" size="md" onClick={() => setShowModal(true)}>
             + Nova OS
           </Button>
@@ -257,12 +253,12 @@ export default function Layout() {
             {({ isActive }) => (
               <div
                 className="relative flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-150"
-                style={{ color: isActive ? 'var(--apex-lime)' : 'var(--apex-muted)' }}
+                style={{ color: isActive ? 'var(--apex-gold-bright)' : 'var(--apex-muted)' }}
               >
                 {isActive && (
                   <span
                     className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full"
-                    style={{ width: 32, height: 2, background: 'var(--apex-lime)' }}
+                    style={{ width: 32, height: 2, background: 'var(--apex-gold)' }}
                   />
                 )}
                 {NAV_ICONS_SM[item.to]}
@@ -290,7 +286,7 @@ export default function Layout() {
   )
 }
 
-//Modal Nova OS
+// ── Modal Nova OS ─────────────────────────────────────────────────────────────
 
 function NovaOSModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
   const queryClient = useQueryClient()
@@ -330,32 +326,41 @@ function NovaOSModal({ onClose, onCreated }: { onClose: () => void; onCreated: (
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(6px)' }}
+      style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(6px)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div style={{
         background: 'var(--apex-surface)',
-        border: '1px solid var(--apex-border-2)',
-        borderRadius: 12,
+        border: '1px solid var(--apex-gold-border)',
+        borderRadius: 14,
         width: '100%', maxWidth: 520,
         maxHeight: '90vh', overflowY: 'auto',
+        boxShadow: '0 0 0 1px rgba(186,117,23,0.08)',
       }}>
+        {/* Header do modal com acento dourado */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '16px 20px',
           borderBottom: '1px solid var(--apex-border)',
+          background: 'var(--apex-gold-bg)',
         }}>
-          <span style={{
-            fontFamily: 'var(--f-display)',
-            fontSize: 16, fontWeight: 900,
-            color: 'var(--apex-text)',
-            textTransform: 'uppercase', letterSpacing: '0.04em',
-          }}>
-            Nova Ordem de Serviço
-          </span>
+          <div className="flex items-center gap-3">
+            <ApexMark size={24} />
+            <span style={{
+              fontFamily: 'var(--f-display)',
+              fontSize: 16, fontWeight: 900,
+              color: 'var(--apex-text)',
+              textTransform: 'uppercase', letterSpacing: '0.04em',
+            }}>
+              Nova Ordem de Serviço
+            </span>
+          </div>
           <button
             onClick={onClose}
-            style={{ background: 'none', border: 'none', color: 'var(--apex-muted)', cursor: 'pointer', fontSize: 18 }}
+            style={{
+              background: 'none', border: 'none',
+              color: 'var(--apex-muted)', cursor: 'pointer', fontSize: 18,
+            }}
           >
             ✕
           </button>

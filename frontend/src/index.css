@@ -3,7 +3,7 @@
 /* Fontes */
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-/* Tokens de identidade APEX AUTOBODY */
+/* ── Tokens de identidade APEX AUTOBODY ───────────────────────────── */
 :root {
   /* Fundos */
   --apex-bg:          #1A1710;
@@ -25,7 +25,7 @@
   --apex-muted:       #8A8475;
   --apex-muted-2:     #5A5649;
 
-
+  /* Semânticas (mantidas para compatibilidade) */
   --apex-danger:      #ff3d3d;
   --apex-danger-bg:   rgba(255, 61,  61,  0.08);
   --apex-danger-b:    rgba(255, 61,  61,  0.20);
@@ -44,7 +44,7 @@
   --f-mono:    'JetBrains Mono', monospace;
 }
 
-/*Reset base */
+/* ── Reset base ───────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body, #root {
@@ -55,13 +55,13 @@ html, body, #root {
   -webkit-font-smoothing: antialiased;
 }
 
-/*Scrollbar global */
+/* ── Scrollbar global ─────────────────────────────────────────────── */
 ::-webkit-scrollbar        { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track  { background: transparent; }
 ::-webkit-scrollbar-thumb  { background: var(--apex-border-2); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--apex-gold-dim); }
 
-/* Kanban board scrollbar  */
+/* ── Kanban board scrollbar ───────────────────────────────────────── */
 .kanban-board::-webkit-scrollbar        { height: 3px; }
 .kanban-board::-webkit-scrollbar-track  { background: transparent; }
 .kanban-board::-webkit-scrollbar-thumb  { background: var(--apex-border-2); border-radius: 2px; }
@@ -71,7 +71,7 @@ html, body, #root {
   .kanban-board                    { scrollbar-width: none; }
 }
 
-/* Animação de entrada do card após drop  */
+/* ── Animação de entrada do card após drop ────────────────────────── */
 @keyframes cardEnter {
   from { opacity: 0; transform: translateY(-6px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
@@ -80,14 +80,14 @@ html, body, #root {
   animation: cardEnter 280ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/*Pulse de alerta */
+/* ── Pulse de alerta ──────────────────────────────────────────────── */
 @keyframes alertPulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.4; }
 }
 .alert-pulse { animation: alertPulse 2s ease-in-out infinite; }
 
-/*Brilho dourado (hover em elementos de destaque)*/
+/* ── Brilho dourado (hover em elementos de destaque) ─────────────── */
 @keyframes goldShimmer {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }

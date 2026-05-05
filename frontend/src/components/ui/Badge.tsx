@@ -7,16 +7,24 @@ const badgeVariants = cva(
     'font-bold uppercase tracking-widest',
     'px-2 py-0.5 border whitespace-nowrap',
     'rounded-[4px]',
+    'text-[8px]',
   ],
   {
     variants: {
       intent: {
-        alert:   ['bg-[--apex-danger-bg]  text-[--apex-danger]  border-[--apex-danger-b]',  'text-[8px]'],
-        warning: ['bg-[--apex-warning-bg] text-[--apex-warning] border-[rgba(245,166,35,0.2)]', 'text-[8px]'],
-        ok:      ['bg-[--apex-green-bg]   text-[--apex-green]   border-[rgba(0,229,160,0.2)]',  'text-[8px]'],
-        info:    ['bg-[--apex-blue-bg]    text-[--apex-blue]    border-[rgba(77,159,255,0.2)]',  'text-[8px]'],
-        neutral: ['bg-[--apex-card]       text-[--apex-muted]   border-[--apex-border-2]',       'text-[8px]'],
-        lime:    ['bg-[--apex-lime-bg]    text-[--apex-lime]    border-[--apex-lime-border]',     'text-[8px]'],
+        // status primário da marca
+        gold:    [
+          'bg-[--apex-gold-bg] text-[--apex-gold-bright] border-[--apex-gold-border]',
+        ],
+        white:   [
+          'bg-[rgba(245,240,232,0.08)] text-[#F5F0E8] border-[rgba(245,240,232,0.15)]',
+        ],
+        alert:   ['bg-[--apex-danger-bg]  text-[--apex-danger]  border-[--apex-danger-b]'],
+        warning: ['bg-[--apex-gold-bg]    text-[--apex-gold-bright] border-[--apex-gold-border]'],
+        ok:      ['bg-[--apex-green-bg]   text-[--apex-green]   border-[rgba(0,229,160,0.2)]'],
+        info:    ['bg-[--apex-blue-bg]    text-[--apex-blue]    border-[rgba(77,159,255,0.2)]'],
+        neutral: ['bg-[--apex-card]       text-[--apex-muted]   border-[--apex-border-2]'],
+        purple:  ['bg-[--apex-purple-bg]  text-[--apex-purple]  border-[rgba(191,128,255,0.2)]'],
       },
     },
     defaultVariants: {
