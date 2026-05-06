@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import '../styles/preloader.css'
+import '../style-preloader/preloader.css'
 
 interface PreloaderProps {
   minDuration?: number
