@@ -77,7 +77,7 @@ export default function OSListPage() {
         <div className="flex-1 h-px bg-[var(--border)]" />
 
         {/* Campo de busca com debounce */}
-        <div className="flex items-center gap-2 h-[28px] px-3 rounded-[3px] bg-[var(--bg-card)] border border-[var(--border)] transition-colors"
+        <div className="flex items-center gap-2 h-[28px] px-3 transition-colors"
           style={{ borderColor: search ? 'var(--orange)' : undefined }}>
           <span className="text-[var(--text-muted)] text-[11px]" aria-hidden>
             {isSearching || (hasQuery && isLoading) ? '⟳' : '⌕'}
