@@ -165,9 +165,9 @@ export default function OSListPage() {
                   </span>
                   <Badge
                     intent={
-                      os.alerta_parada ? 'alert'
-                      : os.prazo_vencido ? 'warning'
-                      : os.status === 'Entregue' ? 'ok'
+                      os.alerta_parada ? 'red'
+                      : os.prazo_vencido ? 'amber'
+                      : os.status === 'Entregue' ? 'green'
                       : 'neutral'
                     }
                     className="justify-self-start"
