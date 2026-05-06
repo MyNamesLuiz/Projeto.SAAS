@@ -1,11 +1,11 @@
-import { getDB } from '../db/database.js';
-import type { DashboardMetrics } from '../types/index.js';
+import db from '../database/database.js';
+import type { DashboardMetrics } from '../@types/index.js';
 
 function stmtToRows(result: ReturnType<typeof getDB>['exec']): Record<string, unknown>[] {
   if (!result.length) return [];
   const [{ columns, values }] = result;
-  return values.map((row: { [x: string]: any; }) =>
-    Object.fromEntries(columns.map((col: any, i: string | number) => [col, row[i]]))
+  return values.map((row) =>
+    Object.fromEntries(columns.map((col, i) => [col, row[i]]))
   );
 }
 

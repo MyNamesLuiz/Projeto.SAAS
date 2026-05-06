@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { api } from '../services/api'
 import { Section, Field, inputCls } from './FormHelpers'
@@ -192,14 +192,27 @@ export default function Layout() {
           ))}
         </nav>
 
-        {/* Configurações */}
+        {/* User + Logout */}
         <div className="px-2 pb-4" style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
-          <div className="apex-nav-item flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer">
-            <IconSettings active={false} />
-            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 13, fontWeight: 700, letterSpacing: '0.06em', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
-              Configurações
+          {currentUser && (
+            <div className="px-4 py-2 mb-1">
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-body)', letterSpacing: '0.03em', marginBottom: 2 }}>Conectado como</div>
+              <div style={{ fontSize: 12, color: 'var(--text-secondary)', fontFamily: 'var(--font-body)', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{currentUser.nome ?? currentUser.email}</div>
+            </div>
+          )}
+          <button
+            onClick={handleLogout}
+            className="apex-nav-item flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer w-full"
+            style={{ background: 'transparent', border: 'none', textAlign: 'left' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+              <path d="M7 9h8M12 6l3 3-3 3" stroke="#DC3545" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 3H4a1 1 0 00-1 1v10a1 1 0 001 1h6" stroke="#6C757D" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 13, fontWeight: 700, letterSpacing: '0.06em', color: 'var(--red)', textTransform: 'uppercase' }}>
+              Sair
             </span>
-          </div>
+          </button>
         </div>
       </aside>
 

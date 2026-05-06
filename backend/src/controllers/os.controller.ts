@@ -7,7 +7,7 @@ import {
   deleteOS,
   findHistoricoByOS,
 } from '../models/os.model.js';
-import type { CreateOSBody, UpdateOSBody } from '../types/index.js';
+import type { CreateOSBody, UpdateOSBody } from '../@types/index.js';
 
 // GET /os?q=...
 export async function listOS(

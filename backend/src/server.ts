@@ -1,44 +1,34 @@
-import Fastify from 'fastify';
-import cors from '@fastify/cors';
-import { initDB } from './db/database.js';
+import Fastify from 'fastify'
+import cors from '@fastify/cors'
+import './database/database.js'
 import { osRoutes } from './routes/os.routes.js';
 import { dashboardRoutes } from './routes/dashboard.routes.js';
+import { authRoutes } from './routes/auth.routes.js';
 
-async function bootstrap() {
-  const app = Fastify({
-    logger: {
-      transport: {
-        target: 'pino-pretty',
-        options: { colorize: true, translateTime: 'HH:MM:ss', ignore: 'pid,hostname' },
-      },
-    },
-  });
+const app = Fastify({ logger: true })
 
-  // CORS — aceita qualquer origem em dev; restringir em produção
-  await app.register(cors, {
-    origin: process.env.CORS_ORIGIN ?? '*',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  });
+app.register(cors, { origin: '*' })
+await app.register(osRoutes, { prefix: '/os' });
+await app.register(dashboardRoutes, { prefix: '/dashboard' })
+app.get('/health', async () => {
+  return { status: 'ok', project: 'APEX AUTOBODY' }
+})
 
-  // Inicializa banco
-  await initDB();
-  app.log.info('✅ Banco de dados inicializado');
+// await app.ready()
+// console.log('🚀 Servidor rodando em http://localhost:3333')
+// console.log(app.printRoutes()) // Imprime as rotas para verificação
 
-  // Prefixo global de API
-  app.register(osRoutes, { prefix: '/api' });
-  app.register(dashboardRoutes, { prefix: '/api' });
+// try {
+//   await app.listen({ port: 3333, host: '0.0.0.0' });
+// } catch (err) {
+//   app.log.error(err);
+//   process.exit(1);
+// }
 
-  // Health check
-  app.get('/health', async () => ({ status: 'ok', timestamp: new Date().toISOString() }));
-
-  const PORT = Number(process.env.PORT ?? 3333);
-  const HOST = process.env.HOST ?? '0.0.0.0';
-
-  await app.listen({ port: PORT, host: HOST });
-  app.log.info(`🚀 APEX API rodando em http://${HOST}:${PORT}`);
-}
-
-bootstrap().catch((err) => {
-  console.error('Erro fatal ao inicializar:', err);
-  process.exit(1);
-});
+await app.listen({ port: 3333 }, (err) => {
+  if (err) {
+    app.log.error(err)
+    process.exit(1)
+  }
+  app.log.info(app.printRoutes());
+})
