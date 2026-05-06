@@ -3,6 +3,7 @@ import cors from '@fastify/cors'
 import './database/database.js'
 import { osRoutes } from './routes/os.routes.js';
 import { dashboardRoutes } from './routes/dashboard.routes.js';
+import { authRoutes } from './routes/auth.routes.js';
 
 const app = Fastify({ logger: true })
 
