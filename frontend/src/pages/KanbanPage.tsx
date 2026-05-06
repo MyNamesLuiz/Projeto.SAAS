@@ -103,6 +103,7 @@ export default function KanbanPage() {
   const [detailOS, setDetailOS]           = useState<OS | null>(null)
   const [novaOSCol, setNovaOSCol]         = useState<OSStatus | null>(null)
   const [justDroppedId, setJustDroppedId] = useState<number | null>(null)
+  const [blockModal, setBlockModal]       = useState<OS | null>(null)
 
   const { data: osList = [], isLoading, isError } = useQuery({
     queryKey: ['os'],
@@ -175,6 +176,16 @@ export default function KanbanPage() {
     // Usa a posição otimista como "atual" para evitar comparação com dado desatualizado do servidor
     const current = positions[os.id] ?? toKanban(os.status)
     if (current === target) return
+
+    // Bloqueia saída de "aprovacao" sem valor_final
+    if (current === 'aprovacao' && target !== 'aprovacao' && target !== 'orcamento') {
+      if (!os.valor_final) {
+        resetPosition(os.id, current)
+        setBlockModal(os)
+        return
+      }
+    }
+
     moveOS(os.id, target)
     setJustDroppedId(os.id)
     setTimeout(() => setJustDroppedId(null), 400)
@@ -332,6 +343,62 @@ export default function KanbanPage() {
 
       {detailOS && <OSDetailModal os={detailOS} onClose={() => setDetailOS(null)} />}
       {novaOSCol && <NovaOSModal defaultStatus={novaOSCol} onClose={() => setNovaOSCol(null)} />}
+
+      {blockModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' }}
+          onClick={() => setBlockModal(null)}
+        >
+          <div
+            className="bg-[var(--bg-base)] w-full max-w-sm rounded-[6px] p-6 flex flex-col gap-4"
+            style={{ border: '1px solid var(--amber-border)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: 'var(--amber-dim)', border: '1px solid var(--amber-border)' }}
+              >
+                <span style={{ fontSize: 16 }}>⚠</span>
+              </div>
+              <div>
+                <p className="font-mono text-[11px] font-bold tracking-widest text-[var(--text-primary)] uppercase">
+                  Valor Final necessário
+                </p>
+                <p className="font-mono text-[9px] text-[var(--text-muted)] mt-0.5 tracking-widest">
+                  OS-{String(blockModal.id).padStart(3, '0')} · {blockModal.veiculo_placa}
+                </p>
+              </div>
+            </div>
+
+            <p className="font-mono text-[11px] text-[var(--text-secondary)] leading-relaxed">
+              Para avançar esta OS da etapa{' '}
+              <span style={{ color: 'var(--amber)' }}>Ag. Aprovação</span>,
+              é necessário informar o{' '}
+              <strong style={{ color: 'var(--text-primary)' }}>Valor Final</strong>{' '}
+              do serviço.
+            </p>
+
+            <div className="flex justify-end gap-2 pt-1" style={{ borderTop: '1px solid var(--border)' }}>
+              <button
+                onClick={() => setBlockModal(null)}
+                className="h-9 px-4 font-mono text-[9px] tracking-widest uppercase rounded-[3px] cursor-pointer"
+                style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)' }}
+              >
+                Entendido
+              </button>
+              <button
+                onClick={() => { setDetailOS(blockModal); setBlockModal(null) }}
+                className="h-9 px-4 font-mono text-[9px] tracking-widest uppercase rounded-[3px] cursor-pointer font-bold"
+                style={{ background: 'var(--amber-dim)', color: 'var(--amber)', border: '1px solid var(--amber-border)' }}
+              >
+                Abrir OS
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
