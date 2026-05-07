@@ -2,7 +2,7 @@ import db from '../database/database.js';
 
 export function getDashboardMetrics() {
 
-  // Usa lower() em todas as comparações para tolerar status em maiúsculo/minúsculo
+  // lower() em todas as comparações — tolera status em maiúsculo/minúsculo (dados legados)
   const osAbertas = (db.prepare(
     `SELECT COUNT(*) as count FROM os WHERE lower(status) != 'entregue'`
   ).get() as any)?.count ?? 0;
@@ -13,12 +13,11 @@ export function getDashboardMetrics() {
        AND strftime('%Y-%m', updated_at) = strftime('%Y-%m', 'now')`
   ).get() as any)?.count ?? 0;
 
-  // Receita = soma de valor_final apenas de OSs entregues no mês corrente.
-  // Status "entregue" garante que o serviço foi concluído e a receita é real.
+  // Receita = soma de valor_final de OSs com valor_final preenchido no mês corrente.
+  // Não exige status 'entregue' — o campo pode ser preenchido antes da entrega.
   const receitaMes = (db.prepare(
     `SELECT COALESCE(SUM(valor_final), 0) as total FROM os
-     WHERE lower(status) = 'entregue'
-       AND valor_final IS NOT NULL
+     WHERE valor_final IS NOT NULL
        AND strftime('%Y-%m', updated_at) = strftime('%Y-%m', 'now')`
   ).get() as any)?.total ?? 0;
 
