@@ -6,7 +6,7 @@ export type OSStatus =
   | 'acabamento'
   | 'pronto'
   | 'entregue'
-
+ 
 export const STATUS_MAP: Record<string, OSStatus> = {
   // Valores simples em minúsculo — formato ideal (backend salva assim)
   'orcamento':             'orcamento',
@@ -31,7 +31,7 @@ export const STATUS_MAP: Record<string, OSStatus> = {
   'em pintura':            'pintura',
   'pronto para entrega':   'pronto',
 }
-
+ 
 export const STATUS_MAP_REVERSE: Record<OSStatus, string> = {
   orcamento:  'orcamento',
   aprovacao:  'aprovacao',
@@ -41,7 +41,7 @@ export const STATUS_MAP_REVERSE: Record<OSStatus, string> = {
   pronto:     'pronto',
   entregue:   'entregue',
 }
-
+ 
 export interface KanbanColumn {
   id:        OSStatus
   label:     string
@@ -50,7 +50,7 @@ export interface KanbanColumn {
   accent:    string
   borderTop: string
 }
-
+ 
 export const KANBAN_COLUMNS: KanbanColumn[] = [
   { id: 'orcamento',  label: 'Orçamento',        color: '#ADB5BD', headerBg: 'rgba(173,181,189,0.08)', accent: '#ADB5BD', borderTop: '#ADB5BD' },
   { id: 'aprovacao',  label: 'Ag. Aprovação',    color: '#FFC107', headerBg: 'rgba(255,193,7,0.08)',   accent: '#FFC107', borderTop: '#FFC107' },
@@ -60,7 +60,7 @@ export const KANBAN_COLUMNS: KanbanColumn[] = [
   { id: 'pronto',     label: 'Pronto p/ Entrega',color: '#28A745', headerBg: 'rgba(40,167,69,0.08)',   accent: '#28A745', borderTop: '#28A745' },
   { id: 'entregue',   label: 'Entregue',         color: '#6C757D', headerBg: 'rgba(108,117,125,0.08)', accent: '#6C757D', borderTop: '#6C757D' },
 ]
-
+ 
 export interface OS {
   id:                number
   cliente_nome:      string
@@ -79,7 +79,7 @@ export interface OS {
   alerta_parada:     boolean
   prazo_vencido:     boolean
 }
-
+ 
 export interface HistoricoOS {
   id:              number
   os_id:           number
@@ -87,7 +87,7 @@ export interface HistoricoOS {
   status_novo:     string
   criado_em:       string
 }
-
+ 
 export interface DashboardMetrics {
   os_abertas:        number
   os_concluidas_mes: number
@@ -95,7 +95,7 @@ export interface DashboardMetrics {
   os_prazo_vencido:  number
   os_paradas:        number
 }
-
+ 
 export interface CreateOSBody {
   cliente_nome:      string
   cliente_telefone:  string
@@ -106,7 +106,7 @@ export interface CreateOSBody {
   valor_estimado?:   number
   prazo_estimado?:   string
 }
-
+ 
 export interface UpdateOSBody {
   cliente_nome?:      string
   cliente_telefone?:  string
