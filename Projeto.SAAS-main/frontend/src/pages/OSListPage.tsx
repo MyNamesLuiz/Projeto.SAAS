@@ -1,5 +1,5 @@
 //Ordens de Serviço — Lista com Busca via API
-
+ 
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '../components/ui/Button'
@@ -9,9 +9,9 @@ import { useDebounce } from '../hooks/useDebounce'
 import { useSearchOS } from '../hooks/useSearchOS'
 import { KANBAN_COLUMNS, STATUS_MAP } from '../types/os'
 import type { OS } from '../types/os'
-
+ 
 const HEADERS = ['OS', 'Placa', 'Cliente / Veículo', 'Serviço', 'Entrada', 'Prazo', 'Valor', 'Status', '']
-
+ 
 function statusColor(s: string) {
   return (
     KANBAN_COLUMNS.find((c) => c.id === STATUS_MAP[s])
@@ -29,15 +29,15 @@ function fmtValor(v: number | null) {
   if (!v) return '—'
   return `R$ ${v.toLocaleString('pt-BR', { minimumFractionDigits: 0 })}`
 }
-
+ 
 export default function OSListPage() {
   const queryClient = useQueryClient()
   const [search, setSearch]               = useState('')
   const [confirmDelete, setConfirmDelete] = useState<OS | null>(null)
-
+ 
   const debouncedSearch = useDebounce(search, 400)
   const isSearching     = search !== debouncedSearch
-
+ 
   const { data: allOS = [], isLoading: loadingAll } = useQuery({
     queryKey: ['os', ''],
     queryFn: () => api.os.list(),
@@ -46,14 +46,14 @@ export default function OSListPage() {
     refetchInterval: 10_000,
     refetchOnWindowFocus: true,
   })
-
+ 
   const { data: searchResult = [], isFetching: fetchingSearch } = useSearchOS(debouncedSearch)
-
+ 
   const hasQuery  = debouncedSearch.trim().length > 0
   const osList    = hasQuery ? searchResult : allOS
   const isLoading = hasQuery ? fetchingSearch : loadingAll
   const filtered  = osList
-
+ 
   const deleteOS = useMutation({
     mutationFn: (id: number) => api.os.delete(id),
     onSuccess: () => {
@@ -63,17 +63,17 @@ export default function OSListPage() {
       setConfirmDelete(null)
     },
   })
-
+ 
   return (
     <div className="flex flex-col gap-4">
-
+ 
       {/* Cabeçalho */}
       <div className="flex items-center gap-3">
         <h2 className="font-mono text-[9px] tracking-widest text-[var(--text-muted)] uppercase">
           Todas as ordens de serviço
         </h2>
         <div className="flex-1 h-px bg-[var(--border)]" />
-
+ 
         <div className="flex items-center gap-2 h-[28px] px-3 transition-colors"
           style={{ borderColor: search ? 'var(--orange)' : undefined }}>
           <span className="text-[var(--text-muted)] text-[11px]" aria-hidden>
@@ -96,7 +96,7 @@ export default function OSListPage() {
           )}
         </div>
       </div>
-
+ 
       {/* Badge resultado busca */}
       {hasQuery && !isLoading && (
         <div className="flex items-center gap-2">
@@ -111,7 +111,7 @@ export default function OSListPage() {
           </button>
         </div>
       )}
-
+ 
       {/* ── TABELA — desktop only ─────────────────────────────────────── */}
       <div className="hidden md:block bg-[var(--bg-base)] border border-[var(--border)] rounded-[4px] overflow-hidden overflow-x-auto">
         <div
@@ -122,7 +122,7 @@ export default function OSListPage() {
             <span key={h} className="font-mono text-[8px] tracking-widest text-[var(--text-muted)] uppercase">{h}</span>
           ))}
         </div>
-
+ 
         {isLoading || isSearching ? (
           <div className="flex flex-col gap-px min-w-[900px]">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -183,7 +183,7 @@ export default function OSListPage() {
           </div>
         )}
       </div>
-
+ 
       {/* ── CARDS — mobile only ───────────────────────────────────────── */}
       <div className="flex flex-col gap-2 md:hidden">
         {isLoading || isSearching ? (
@@ -233,7 +233,7 @@ export default function OSListPage() {
                     ✕
                   </button>
                 </div>
-
+ 
                 {/* Cliente + veículo */}
                 <div>
                   <p className="font-mono text-[12px] font-bold text-[var(--text-primary)] leading-tight truncate">
@@ -243,12 +243,12 @@ export default function OSListPage() {
                     {os.veiculo_modelo} {os.veiculo_ano}
                   </p>
                 </div>
-
+ 
                 {/* Serviço */}
                 <p className="font-mono text-[10px] text-[var(--text-secondary)] truncate">
                   {os.descricao_servico}
                 </p>
-
+ 
                 {/* Linha rodapé: status + datas + valor */}
                 <div className="flex items-center justify-between pt-1 border-t border-[var(--border)]">
                   <div className="flex items-center gap-2">
@@ -273,7 +273,7 @@ export default function OSListPage() {
           })
         )}
       </div>
-
+ 
       {/* Rodapé contagem */}
       {!isLoading && !isSearching && (
         <span className="font-mono text-[9px] text-[var(--text-secondary)] tracking-widest self-end">
@@ -282,7 +282,7 @@ export default function OSListPage() {
             : `${filtered.length} de ${allOS.length} OS${allOS.length !== 1 ? 's' : ''}`}
         </span>
       )}
-
+ 
       {confirmDelete && (
         <ConfirmModal
           msg={`Remover OS de ${confirmDelete.cliente_nome} (${confirmDelete.veiculo_placa})?`}
@@ -294,9 +294,9 @@ export default function OSListPage() {
     </div>
   )
 }
-
+ 
 //Empty State
-
+ 
 function EmptyState({ hasSearch }: { hasSearch: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-3">
@@ -314,9 +314,9 @@ function EmptyState({ hasSearch }: { hasSearch: boolean }) {
     </div>
   )
 }
-
+ 
 //Confirm Modal
-
+ 
 function ConfirmModal({ msg, loading, onConfirm, onCancel }: {
   msg: string; loading: boolean; onConfirm: () => void; onCancel: () => void
 }) {
