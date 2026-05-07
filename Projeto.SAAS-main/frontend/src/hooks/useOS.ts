@@ -1,9 +1,9 @@
 // ─── Hooks: Ordens de Serviço ─────────────────────────────────────────────────
-
+ 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../services/api'
 import type { UpdateOSBody } from '../types/os'
-
+ 
 export function useOSList(search?: string) {
   return useQuery({
     queryKey: ['os', search ?? ''],
@@ -13,7 +13,7 @@ export function useOSList(search?: string) {
     refetchOnWindowFocus: true,
   })
 }
-
+ 
 export function useOS(id: number) {
   return useQuery({
     queryKey: ['os', id],
@@ -21,7 +21,7 @@ export function useOS(id: number) {
     enabled: id > 0,
   })
 }
-
+ 
 export function useUpdateOS() {
   const qc = useQueryClient()
   return useMutation({
@@ -35,7 +35,7 @@ export function useUpdateOS() {
     },
   })
 }
-
+ 
 export function useDeleteOS() {
   const qc = useQueryClient()
   return useMutation({
