@@ -641,6 +641,7 @@ function OSDetailModal({ os, onClose }: { os: OS; onClose: () => void }) {
     mutationFn: (status: string) => api.os.updateStatus(os.id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['os'] })
+      queryClient.invalidateQueries({ queryKey: ['os-search'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       onClose()
     },
@@ -651,6 +652,7 @@ function OSDetailModal({ os, onClose }: { os: OS; onClose: () => void }) {
     mutationFn: (body: UpdateOSBody) => api.os.update(os.id, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['os'] })
+      queryClient.invalidateQueries({ queryKey: ['os-search'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       setEditing(false)
       setSaveError('')
@@ -946,6 +948,7 @@ function NovaOSModal({ defaultStatus, onClose }: { defaultStatus: OSStatus; onCl
         await api.os.updateStatus(nova.id, STATUS_MAP_REVERSE[defaultStatus])
       }
       queryClient.invalidateQueries({ queryKey: ['os'] })
+      queryClient.invalidateQueries({ queryKey: ['os-search'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       onClose()
     },
