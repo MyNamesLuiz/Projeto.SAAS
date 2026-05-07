@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import '../styles/preloader.css'
+import '../style-preloader/preloader.css'
 
 interface PreloaderProps {
   minDuration?: number
+  onDone?: () => void // Callback opcional para quando o preloader terminar
 }
 
 // Floating micro-particles
@@ -15,7 +16,7 @@ const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
   rise: `${-60 - (i % 3) * 30}px`,
 }))
 
-export default function Preloader({ minDuration = 2400 }: PreloaderProps) {
+export default function Preloader({ minDuration = 2400, onDone }: PreloaderProps) {
   const [visible, setVisible] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
   const [percent, setPercent] = useState(0)
@@ -36,14 +37,17 @@ export default function Preloader({ minDuration = 2400 }: PreloaderProps) {
 
     // Trigger fade-out then unmount
     const fadeTimer = setTimeout(() => setFadeOut(true), minDuration)
-    const hideTimer = setTimeout(() => setVisible(false), minDuration + 650)
+    const hideTimer = setTimeout(() => {
+      setVisible(false)
+      onDone?.()
+    }, minDuration + 650)
 
     return () => {
       timers.forEach(clearTimeout)
       clearTimeout(fadeTimer)
       clearTimeout(hideTimer)
     }
-  }, [minDuration])
+  }, [minDuration, onDone])
 
   if (!visible) return null
 

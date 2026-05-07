@@ -6,6 +6,15 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
+  {
+    rules: {
+      "no-unused-vars": ["warn", {
+        varsIgnorePattern: "^_",            // ignora variáveis não utilizadas que começam com "_"
+        argsIgnorePattern: "^_",            // ignora parâmetros de função não utilizados que começam com "_"
+        caughtErrorsIgnorePattern: "^_"     // ignora erros capturados não utilizados que começam com "_"
+      }]
+    }
+  },
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
@@ -20,4 +29,5 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  
 ])

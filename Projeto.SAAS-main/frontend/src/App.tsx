@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import PrivateRoute from './components/PrivateRoute'
+import Preloader from './components/Preloader'
 import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
@@ -23,8 +25,18 @@ const queryClient = new QueryClient({
 })
 
 function App() {
+  const [preloaderDone, setPreloaderDone] = useState(false) // Estado para controlar exibição do preloader
+
   return (
     <QueryClientProvider client={queryClient}>
+      
+        {!preloaderDone && (
+          <Preloader 
+          minDuration={2400}
+          onDone={() => setPreloaderDone(true)}  // Simula carregamento inicial de 2.4s
+          />
+        )}
+      
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
