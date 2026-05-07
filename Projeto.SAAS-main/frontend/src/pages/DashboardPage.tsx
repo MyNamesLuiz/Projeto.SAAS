@@ -6,7 +6,7 @@ import { useDebounce } from '../hooks/useDebounce'
 import { useSearchOS } from '../hooks/useSearchOS'
 import { KANBAN_COLUMNS, STATUS_MAP } from '../types/os'
 import type { OS, DashboardMetrics } from '../types/os'
-
+ 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 function getCol(s: string) { return KANBAN_COLUMNS.find(c => c.id === STATUS_MAP[s]) }
 function statusColor(s: string) { return getCol(s)?.color ?? 'var(--text-secondary)' }
@@ -14,14 +14,14 @@ function statusLabel(s: string) { return getCol(s)?.label ?? s }
 function fmtBRL(v: number) {
   return v >= 1000 ? `R$ ${(v / 1000).toFixed(1)}k` : `R$ ${v.toLocaleString('pt-BR')}`
 }
-
+ 
 // ── Contexto real por card ────────────────────────────────────────────────────
 // Texto + cor derivados dos valores da API, sem inventar dados históricos.
 type CardKey = 'abertas' | 'receita' | 'concluidas' | 'vencido' | 'paradas'
-
+ 
 function cardContext(key: CardKey, m: DashboardMetrics): { text: string; color: string } {
   const total = (m.os_abertas ?? 0) + (m.os_concluidas_mes ?? 0)
-
+ 
   switch (key) {
     case 'abertas': {
       if (total === 0) return { text: 'nenhuma OS no sistema', color: 'var(--text-muted)' }
@@ -52,7 +52,7 @@ function cardContext(key: CardKey, m: DashboardMetrics): { text: string; color: 
     }
   }
 }
-
+ 
 // ── Metric Card ───────────────────────────────────────────────────────────────
 interface MetricCardProps {
   label:        string
@@ -63,7 +63,7 @@ interface MetricCardProps {
   contextText:  string
   contextColor: string
 }
-
+ 
 function MetricCard({ label, value, accentColor, icon, isLoading, contextText, contextColor }: MetricCardProps) {
   return (
     <div
@@ -81,7 +81,7 @@ function MetricCard({ label, value, accentColor, icon, isLoading, contextText, c
       >
         {icon}
       </div>
-
+ 
       {/* Label */}
       <p style={{
         fontFamily: 'var(--font-heading)', fontSize: 'var(--text-xs)',
@@ -90,7 +90,7 @@ function MetricCard({ label, value, accentColor, icon, isLoading, contextText, c
       }}>
         {label}
       </p>
-
+ 
       {/* Valor principal */}
       {isLoading ? (
         <div className="apex-shimmer h-8 w-16 rounded-lg mb-3" />
@@ -102,10 +102,10 @@ function MetricCard({ label, value, accentColor, icon, isLoading, contextText, c
           {value}
         </p>
       )}
-
+ 
       {/* Divisor */}
       <div style={{ height: 1, background: 'var(--border)', marginBottom: 10 }} />
-
+ 
       {/* Contexto — texto real, sem gráfico sintético */}
       {isLoading ? (
         <div className="apex-shimmer h-3 w-28 rounded" />
@@ -120,7 +120,7 @@ function MetricCard({ label, value, accentColor, icon, isLoading, contextText, c
     </div>
   )
 }
-
+ 
 // ── Ícones ────────────────────────────────────────────────────────────────────
 function IconClipboard({ color }: { color: string }) {
   return <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -169,7 +169,7 @@ function IconRecentClock({ color }: { color: string }) {
     <path d="M9 5.5V9l2.5 2" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 }
-
+ 
 // ── Panel ─────────────────────────────────────────────────────────────────────
 function Panel({ title, titleColor, icon, action, children }: {
   title: string; titleColor?: string; icon: React.ReactNode
@@ -193,7 +193,7 @@ function Panel({ title, titleColor, icon, action, children }: {
     </div>
   )
 }
-
+ 
 function NavLink2({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
     <button onClick={onClick} className="cursor-pointer border-none bg-transparent" style={{
@@ -204,13 +204,13 @@ function NavLink2({ onClick, children }: { onClick: () => void; children: React.
     </button>
   )
 }
-
+ 
 // ── OS Row ────────────────────────────────────────────────────────────────────
 function OSRow({ os }: { os: OS }) {
   const color = statusColor(os.status)
   const label = statusLabel(os.status)
   const valor = os.valor_final ?? os.valor_estimado
-
+ 
   return (
     <div className="apex-row-hover flex items-center gap-3 px-5 py-3 cursor-default"
       style={{ borderBottom: '1px solid var(--border)' }}>
@@ -253,7 +253,7 @@ function OSRow({ os }: { os: OS }) {
     </div>
   )
 }
-
+ 
 // ── OS Parada ─────────────────────────────────────────────────────────────────
 function OSParada({ os }: { os: OS }) {
   // Urgência: >7 dias = crítico (vermelho vivo), 4-7 = alerta (âmbar), <=3 = normal
@@ -261,7 +261,7 @@ function OSParada({ os }: { os: OS }) {
   const urgColor = urgencia === 'critico' ? 'var(--red)' : urgencia === 'alerta' ? 'var(--amber)' : 'var(--text-muted)'
   const urgBg    = urgencia === 'critico' ? 'var(--red-dim)' : urgencia === 'alerta' ? 'var(--amber-dim)' : 'var(--bg-hover)'
   const urgBorder= urgencia === 'critico' ? 'var(--red-border)' : urgencia === 'alerta' ? 'var(--amber-border)' : 'var(--border)'
-
+ 
   return (
     <div className="apex-row-hover flex items-center gap-3 px-5 py-3"
       style={{ borderBottom: '1px solid var(--border)', borderLeft: `3px solid ${urgColor}` }}>
@@ -287,7 +287,7 @@ function OSParada({ os }: { os: OS }) {
     </div>
   )
 }
-
+ 
 // ── Skeleton / Empty ──────────────────────────────────────────────────────────
 function Skeleton({ rows = 4 }: { rows?: number }) {
   return (
@@ -296,7 +296,7 @@ function Skeleton({ rows = 4 }: { rows?: number }) {
     </div>
   )
 }
-
+ 
 function Empty({ msg, ok = false }: { msg: string; ok?: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-10 gap-3">
@@ -313,7 +313,7 @@ function Empty({ msg, ok = false }: { msg: string; ok?: boolean }) {
     </div>
   )
 }
-
+ 
 // ── Indicador de atualização ──────────────────────────────────────────────────
 function RefreshDot({ fetching }: { fetching: boolean }) {
   if (!fetching) return null
@@ -329,7 +329,7 @@ function RefreshDot({ fetching }: { fetching: boolean }) {
     />
   )
 }
-
+ 
 // ═══════════════════════════════════════════════════════════
 // DashboardPage
 // ═══════════════════════════════════════════════════════════
@@ -338,7 +338,7 @@ export default function DashboardPage() {
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
   const clearSearch = useCallback(() => setSearch(''), [])
-
+ 
   // Invalida dados quando a aba volta ao foco (garante métricas sempre frescas)
   useEffect(() => {
     const onFocus = () => {
@@ -348,12 +348,12 @@ export default function DashboardPage() {
     window.addEventListener('focus', onFocus)
     return () => window.removeEventListener('focus', onFocus)
   }, [queryClient])
-
+ 
   const debouncedSearch = useDebounce(search, 400)
   const isTyping        = search !== debouncedSearch
   const hasQuery        = debouncedSearch.trim().length > 0
   const { data: searchResult = [], isFetching: fetchingSearch } = useSearchOS(debouncedSearch)
-
+ 
   // Atualização a cada 10s, staleTime 0 = sempre considera dado como "velho"
   // refetchOnWindowFocus = ao voltar para a aba, atualiza imediatamente
   const queryOptions = {
@@ -361,14 +361,14 @@ export default function DashboardPage() {
     refetchInterval: 10_000,
     refetchOnWindowFocus: true,
   }
-
+ 
   const { data: metrics, isLoading: loadingMetrics, isFetching: fetchingMetrics } =
     useQuery<DashboardMetrics>({
       queryKey: ['dashboard'],
       queryFn:  () => api.dashboard.metrics(),
       ...queryOptions,
     })
-
+ 
   const { data: osList = [], isLoading: loadingOS, isFetching: fetchingOS } =
     useQuery<OS[]>({
       queryKey: ['os', ''],
@@ -376,7 +376,7 @@ export default function DashboardPage() {
       enabled:  !hasQuery,
       ...queryOptions,
     })
-
+ 
   const recentes = [...osList]
     .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
     .slice(0, 6)
@@ -384,7 +384,7 @@ export default function DashboardPage() {
     .filter(o => o.alerta_parada)
     .sort((a, b) => b.dias_na_etapa - a.dias_na_etapa)
     .slice(0, 5)
-
+ 
   const receita    = metrics?.receita_mes ?? 0
   const receitaFmt = receita >= 1000 ? `R$ ${(receita / 1000).toFixed(1)}k` : `R$ ${receita.toLocaleString('pt-BR')}`
   const ctx        = metrics ? {
@@ -394,12 +394,12 @@ export default function DashboardPage() {
     vencido:    cardContext('vencido',    metrics),
     paradas:    cardContext('paradas',    metrics),
   } : null
-
+ 
   const isBgFetching = !loadingMetrics && (fetchingMetrics || fetchingOS)
-
+ 
   return (
     <div className="flex flex-col gap-6 max-w-[1280px]">
-
+ 
       {/* ── Busca ───────────────────────────────────────────────────────── */}
       <div>
         <p style={{
@@ -440,7 +440,7 @@ export default function DashboardPage() {
             </button>
           )}
         </div>
-
+ 
         {hasQuery && (
           <div className="mt-2 rounded-xl overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-strong)' }}>
             {fetchingSearch || isTyping ? (
@@ -467,7 +467,7 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
-
+ 
       {!hasQuery && (
         <>
           {/* ── Métricas ─────────────────────────────────────────────────── */}
@@ -530,7 +530,7 @@ export default function DashboardPage() {
               />
             </div>
           </div>
-
+ 
           {/* ── Painéis ───────────────────────────────────────────────────── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Panel
@@ -540,7 +540,7 @@ export default function DashboardPage() {
             >
               {loadingOS ? <Skeleton rows={4} /> : recentes.length === 0 ? <Empty msg="Nenhuma OS cadastrada" /> : recentes.map(os => <OSRow key={os.id} os={os} />)}
             </Panel>
-
+ 
             <Panel
               title={`OSS Paradas${(metrics?.os_paradas ?? 0) > 0 ? ` · ${metrics?.os_paradas}` : ''}`}
               titleColor={paradas.length > 0 ? 'var(--red)' : undefined}
