@@ -1,3 +1,5 @@
+#[Ver PRD completo](./PRD.md)
+
 # APEX AUTOBODY — Sistema de Gestão de Ordens de Serviço
 
 > Plataforma SaaS para gestão operacional de funilarias e oficinas de pintura automotiva.
