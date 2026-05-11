@@ -108,6 +108,7 @@ export default function KanbanPage() {
   const [novaOSCol, setNovaOSCol]         = useState<OSStatus | null>(null)
   const [justDroppedId, setJustDroppedId] = useState<number | null>(null)
   const [blockModal, setBlockModal]       = useState<OS | null>(null)
+  const [skipApprovalModal, setSkipApprovalModal] = useState<OS | null>(null)
 
   const { data: osList = [], isLoading, isError } = useQuery({
     queryKey: ['os', ''],
@@ -221,6 +222,13 @@ export default function KanbanPage() {
     // pulando o bloqueo e nunca persistindo no servidor.
     const current = toKanban(os.status)
     if (current === target) return
+
+    // Bloqueia pulo de "orcamento" ignorando aprovação
+    if (current === 'orcamento' && target !== 'aprovacao') {
+      resetPosition(os.id, current)
+      setSkipApprovalModal(os)
+      return
+    }
 
     // Bloqueia saída de "aprovacao" sem valor_final
     if (current === 'aprovacao' && target !== 'aprovacao' && target !== 'orcamento') {
@@ -396,6 +404,56 @@ export default function KanbanPage() {
 
       {detailOS && <OSDetailModal os={detailOS} onClose={() => setDetailOS(null)} />}
       {novaOSCol && <NovaOSModal defaultStatus={novaOSCol} onClose={() => setNovaOSCol(null)} />}
+
+      {skipApprovalModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' }}
+          onClick={() => setSkipApprovalModal(null)}
+        >
+          <div
+            className="bg-[var(--bg-base)] w-full max-w-sm rounded-[6px] flex flex-col overflow-hidden fade-up"
+            style={{ border: '1px solid var(--red-border)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 px-5 py-4"
+              style={{ background: 'var(--red-dim)', borderBottom: '1px solid var(--red-border)' }}>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(255,61,90,0.2)', border: '1px solid var(--red-border)' }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+                  <circle cx="8" cy="8" r="6" stroke="var(--red)" strokeWidth="1.4"/>
+                  <line x1="8" y1="5" x2="8" y2="9" stroke="var(--red)" strokeWidth="1.4" strokeLinecap="round"/>
+                  <circle cx="8" cy="11" r="0.6" fill="var(--red)"/>
+                </svg>
+              </div>
+              <div>
+                <p className="font-mono text-[11px] font-bold tracking-widest uppercase" style={{ color: 'var(--red)' }}>
+                  Aprovação obrigatória
+                </p>
+                <p className="font-mono text-[9px] tracking-widest mt-0.5" style={{ color: 'var(--text-secondary)' }}>
+                  OS-{String(skipApprovalModal.id).padStart(3, '0')} · {skipApprovalModal.veiculo_placa} · {skipApprovalModal.cliente_nome}
+                </p>
+              </div>
+            </div>
+            <div className="px-5 py-4 flex flex-col gap-4">
+              <p className="font-mono text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                A OS está em <span style={{ color: 'var(--text-primary)', fontWeight: 700 }}>Orçamento</span>.
+                {' '}Para avançar, ela precisa passar por{' '}
+                <span style={{ color: 'var(--orange)', fontWeight: 700 }}>Ag. Aprovação</span> antes de seguir para as próximas etapas.
+              </p>
+              <div className="flex justify-end pt-1" style={{ borderTop: '1px solid var(--border)' }}>
+                <button
+                  onClick={() => setSkipApprovalModal(null)}
+                  className="h-9 px-4 font-mono text-[9px] tracking-widest uppercase rounded-[3px] cursor-pointer font-bold"
+                  style={{ background: 'var(--orange)', color: '#000' }}
+                >
+                  Entendido
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {blockModal && (
         <div
@@ -853,10 +911,13 @@ function OSDetailModal({ os, onClose }: { os: OS; onClose: () => void }) {
                 const isCurrent  = toKanban(os.status) === col.id
                 // Bloqueia avanço além de aprovação sem valor_final
                 const isBlocked  =
-                  toKanban(os.status) === 'aprovacao' &&
+                  (toKanban(os.status) === 'aprovacao' &&
                   !os.valor_final &&
                   col.id !== 'aprovacao' &&
-                  col.id !== 'orcamento'
+                  col.id !== 'orcamento') ||
+                  (toKanban(os.status) === 'orcamento' &&
+                  col.id !== 'aprovacao' &&
+                  col.id !== 'orcamento')
                 return (
                   <button
                     key={col.id}
