@@ -7,7 +7,12 @@ import { authRoutes } from './routes/auth.routes.js'
 
 const app = Fastify({ logger: true })
 
-app.register(cors, { origin: '*' })
+app.register(cors, {
+  origin: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+})
 
 await app.register(authRoutes, { prefix: '/api' })
 await app.register(osRoutes, { prefix: '/api/os' })
